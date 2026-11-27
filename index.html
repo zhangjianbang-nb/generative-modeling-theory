@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>概率演化与生成动力学 · 自回归、扩散、流与联合生成的统一数学</title>
+<meta name="description" content="一部五百万字的纯理论著作：从概率分解、随机过程、测度传输、随机控制到联合概率结构，逐条推导自回归、扩散、流与联合生成的数学基础，附 192 节可运行代码实验室。">
+<meta name="author" content="张建邦">
+<meta property="og:title" content="概率演化与生成动力学">
+<meta property="og:description" content="自回归、扩散、流与联合生成的统一数学：定义、假设、证明与代码。">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/book.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f6f68'/><path d='M4 20 C 10 14, 16 24, 22 17 S 28 12, 30 15' stroke='%23f6f1e7' stroke-width='2.2' fill='none'/><circle cx='16' cy='19' r='2' fill='%23b8892f'/></svg>">
+</head>
+<body>
+<div class="progress" id="progress"><span></span></div>
+
+<header class="site-head">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 28 28" fill="none"><path d="M3 18 C 8 12, 12 21, 17 15 S 24 10, 26 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="17" r="1.8" fill="currentColor"/></svg>
+    </span>
+    <span class="brand-text">概率演化 <em>与生成动力学</em></span>
+  </a>
+  <nav class="head-nav" aria-label="页面导航">
+    <a href="#intro">总目</a>
+    <a href="#ar01">自回归</a>
+    <a href="#df01">扩散</a>
+    <a href="#fl01">流</a>
+    <a href="#jt01">联合</a>
+  </nav>
+  <div class="head-actions">
+    <button class="icon-btn" id="tocToggle" type="button" aria-label="打开目录" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" type="button" aria-label="切换深色模式">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">Pure Theory · 2026</div>
+      <h1>概率演化<br>与生成动力学</h1>
+      <p class="hero-sub">自回归、扩散、流与联合生成的统一数学：从概率分解到随机过程，从测度传输到随机控制，逐条给出定义、假设、证明与可运行代码。</p>
+      <div class="hero-meta">四部 · 96 章 · 1,536 节 · 192 节代码实验室</div>
+      <div class="hero-lead">
+        <span class="lead-label">本书的立场</span>
+        <p>生成不是“把噪声变成数据”的工程技巧，而是<strong>概率测度沿时间演化</strong>的数学对象。自回归给出离散链式分解，扩散给出随机微分方程，流给出连续性方程与速度场，联合生成给出耦合结构。四者共享同一个骨架：一条概率路径、一个演化算子、一个传输映射。</p>
+      </div>
+      <div class="hero-stats">
+        <div><b id="statCjk">5,000,000</b><span>汉字</span></div>
+        <div><b>96</b><span>章</span></div>
+        <div><b>1,536</b><span>节</span></div>
+        <div><b>192</b><span>代码实验室</span></div>
+      </div>
+      <a class="scroll-cue" href="#intro">进入总目 <span>↓</span></a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg class="hero-river" viewBox="0 0 420 360" fill="none">
+        <text class="river-label" x="10" y="28">FOUR CURRENTS · ONE PROBABILITY PATH</text>
+        <path class="river-line" d="M20 70 C 90 50, 150 95, 215 78 S 340 55, 404 74" stroke="var(--accent)" stroke-width="1.6"/>
+        <path class="river-line river-line-2" d="M20 132 C 95 108, 160 158, 225 138 S 345 112, 404 136" stroke="var(--accent-2)" stroke-width="1.4"/>
+        <path class="river-line river-line-3" d="M20 196 C 100 172, 165 220, 230 200 S 350 176, 404 198" stroke="var(--blue)" stroke-width="1.2"/>
+        <path class="river-line" d="M20 260 C 105 238, 170 282, 235 264 S 352 240, 404 262" stroke="var(--accent)" stroke-width="1"/>
+        <g class="river-dots" fill="var(--accent)">
+          <circle cx="78" cy="62" r="3"/><circle cx="150" cy="88" r="2.4"/><circle cx="222" cy="72" r="3"/>
+          <circle cx="300" cy="60" r="2.2"/><circle cx="360" cy="70" r="2.6"/>
+        </g>
+        <g fill="var(--accent-2)">
+          <circle cx="96" cy="126" r="2.4"/><circle cx="186" cy="150" r="3"/><circle cx="268" cy="130" r="2.2"/><circle cx="348" cy="122" r="2.6"/>
+        </g>
+        <g fill="var(--blue)">
+          <circle cx="110" cy="190" r="2.2"/><circle cx="200" cy="212" r="2.8"/><circle cx="286" cy="194" r="2.2"/><circle cx="356" cy="190" r="2.4"/>
+        </g>
+        <text class="river-caption" x="20" y="308">p(x) = p(x₁)·p(x₂|x₁)···</text>
+        <text class="river-caption-sub" x="20" y="330">AR · SDE · ODE · JOINT</text>
+        <text class="river-caption-sub" x="250" y="308">∂ₜp + ∇·(pv) = 0</text>
+        <text class="river-caption-sub" x="250" y="330">ONE CONTINUITY EQUATION</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main class="layout" id="intro">
+  <aside class="toc-wrap" id="tocWrap" aria-label="全书目录">
+    <div class="toc-head"><span>全书目录</span><button class="icon-btn toc-close" id="tocClose" type="button" aria-label="关闭目录">×</button></div>
+    <nav class="toc" id="toc"></nav>
+    <div class="toc-foot">
+      <a href="#intro">总目</a>
+      <a href="https://github.com/zhangjianbang-nb/generative-modeling-theory" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </aside>
+
+  <article class="article" id="article">
+    <div class="loading">正在装配总目…</div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-mark">∮</div>
+  <p>概率演化与生成动力学 · 纯理论著作</p>
+  <p class="foot-sub">张建邦 · 2026 · 正文 CC BY 4.0 · 代码 MIT</p>
+  <p class="foot-links"><a href="#top">回到顶部</a></p>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>
+
+<script src="assets/katex/katex.min.js"></script>
+<script src="data/core.js"></script>
+<script src="data/totals.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
